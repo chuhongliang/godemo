@@ -1,0 +1,7 @@
+Name: user
+Host: 0.0.0.0
+Port: 8888
+
+Auth: 
+  AccessSecret: 123758sdfsd5f48dfTOKEN
+  AccessExpire: 3600

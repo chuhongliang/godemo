@@ -1,0 +1,94 @@
+
+@baseUrl = http://127.0.0.1:7001
+
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MjE2NDQ5MTAsInVzZXJfaWQiOjEyfQ.hDKyMkyetmPFOKCCpzRpp3E7VT2-1VUNsukF9SMPR4o
+
+
+### index
+GET {{baseUrl}}/ HTTP/1.1
+content-type: application/json
+
+### ping
+GET {{baseUrl}}/ping HTTP/1.1
+content-type: application/json
+
+
+### 管理员登录
+POST {{baseUrl}}/admins/login HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "username": "admin",
+    "password": "123456"
+}
+
+
+
+### 管理员权限信息
+GET {{baseUrl}}/admins/info?token=admin HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+
+
+### 管理员创建
+POST {{baseUrl}}/admins/register HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "username": "admin",
+    "password": "123456"
+}
+
+
+### 修改管理员密码
+POST {{baseUrl}}/admins/change-password HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "username": "admin",
+    "password": "789"
+}
+
+
+### 种子列表
+POST {{baseUrl}}/admins/seed/list HTTP/1.1
+content-type: application/json
+
+{
+    "page": 1,
+    "page_size": 10
+}
+
+
+
+### 创建种子
+POST {{baseUrl}}/admins/seed/create HTTP/1.1
+content-type: application/json
+
+{
+    "title": "新手太阳花",
+    "imgurl": "http",
+    "grow_time": 1,
+    "desc": "aa",
+    "plant_id": 1,
+    "plant_number": 20
+}
+
+
+### 编辑种子
+POST {{baseUrl}}/admin/seed/edit HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "title": "新手太阳花",
+    "imgurl": "http",
+    "grow_time": 1,
+    "desc": "aa",
+    "plant_id": 1,
+    "plant_number": 20
+}

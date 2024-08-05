@@ -1,0 +1,33 @@
+definitions:
+  model.Admin:
+    properties:
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /admin/register:
+    post:
+      parameters:
+      - description: 文章名称
+        in: query
+        name: Username
+        type: string
+      - description: 标签ID
+        in: query
+        name: Password
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Admin'
+      summary: 注册管理员
+swagger: "2.0"

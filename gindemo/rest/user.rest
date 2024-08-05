@@ -1,0 +1,30 @@
+@baseUrl = http://127.0.0.1:7001
+
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MjE3ODkxMDIsInVzZXJfaWQiOjE2fQ.ECBJLp96hPuOavXa9chWuVaXYrM0ghdOOTu73j9LztM
+
+
+
+
+### 登录
+POST {{baseUrl}}/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "Username": "test11",
+    "Password": "123456"
+}
+
+
+### 注册
+POST {{baseUrl}}/auth/register HTTP/1.1
+content-type: application/json
+
+{
+    "Username": "test1",
+    "Password": "123456"
+}
+
+
+### 获取用户信息
+GET {{baseUrl}}/api/v1/user HTTP/1.1
+Authorization: {{token}}
