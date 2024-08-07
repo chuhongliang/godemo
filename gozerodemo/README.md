@@ -43,4 +43,6 @@ $ go run demo.go
 goctl api go --api .\apidemo.api --dir .\
 
 
+// 生成mysql代码
+goctl model mysql ddl --src user.sql --dir ../user/
 ```

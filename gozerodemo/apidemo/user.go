@@ -9,7 +9,6 @@ import (
 	"gozerodemo.com/apidemo/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -20,12 +19,6 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-
-	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
-	// 需要自行将 dsn 中的 host，账号 密码配置正确
-	dsn := "root:123456@tcp(127.0.0.1:3306)/gozero?charset=utf8mb4&parseTime=True&loc=Local"
-	conn := sqlx.NewMysql(dsn)
-	_ = conn
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()

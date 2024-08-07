@@ -46,7 +46,7 @@ func Cors() gin.HandlerFunc {
 func main() {
 	// 初始化配置
 	util.InitConfig()
-	// 初台化MYSQL
+	// 初始化MYSQL
 	model.InitGormClient()
 	// 初始化定时器
 	cron.InitCron()
