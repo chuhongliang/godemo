@@ -7,7 +7,6 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -25,8 +24,7 @@ type (
 	userModel interface {
 		Insert(ctx context.Context, data *User) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*User, error)
-		FindOneByMobile(ctx context.Context, mobile string) (*User, error)
-		FindOneByName(ctx context.Context, name sql.NullString) (*User, error)
+		FindOneByUsername(ctx context.Context, username string) (*User, error)
 		Update(ctx context.Context, data *User) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -37,15 +35,17 @@ type (
 	}
 
 	User struct {
-		Id       int64          `db:"id"`
-		Name     sql.NullString `db:"name"`     // The username
-		Password string         `db:"password"` // The user password
-		Mobile   string         `db:"mobile"`   // The mobile phone number
-		Gender   string         `db:"gender"`   // gender,male|female|unknown
-		Nickname string         `db:"nickname"` // The nickname
-		Type     int64          `db:"type"`     // The user type, 0:normal,1:vip, for test golang keyword
-		CreateAt sql.NullTime   `db:"create_at"`
-		UpdateAt time.Time      `db:"update_at"`
+		Id        int64        `db:"id"`
+		Username  string       `db:"username"`   // 用户名
+		Nickname  string       `db:"nickname"`   // 昵称
+		Avatar    string       `db:"avatar"`     // 头像
+		Level     int64        `db:"level"`      // 等级
+		Exp       int64        `db:"exp"`        // 经验值
+		Gold      int64        `db:"gold"`       // 金币
+		Diamond   int64        `db:"diamond"`    // 钻石
+		LandLevel int64        `db:"land_level"` // 土地等级
+		LoginAt   sql.NullTime `db:"login_at"`   // 登录时间
+		Extra     string       `db:"extra"`      // 额外信息
 	}
 )
 
@@ -76,24 +76,10 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error)
 	}
 }
 
-func (m *defaultUserModel) FindOneByMobile(ctx context.Context, mobile string) (*User, error) {
+func (m *defaultUserModel) FindOneByUsername(ctx context.Context, username string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `mobile` = ? limit 1", userRows, m.table)
-	err := m.conn.QueryRowCtx(ctx, &resp, query, mobile)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlx.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultUserModel) FindOneByName(ctx context.Context, name sql.NullString) (*User, error) {
-	var resp User
-	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", userRows, m.table)
-	err := m.conn.QueryRowCtx(ctx, &resp, query, name)
+	query := fmt.Sprintf("select %s from %s where `username` = ? limit 1", userRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, username)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -105,14 +91,14 @@ func (m *defaultUserModel) FindOneByName(ctx context.Context, name sql.NullStrin
 }
 
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Name, data.Password, data.Mobile, data.Gender, data.Nickname, data.Type)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Username, data.Nickname, data.Avatar, data.Level, data.Exp, data.Gold, data.Diamond, data.LandLevel, data.LoginAt, data.Extra)
 	return ret, err
 }
 
 func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.Name, newData.Password, newData.Mobile, newData.Gender, newData.Nickname, newData.Type, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.Username, newData.Nickname, newData.Avatar, newData.Level, newData.Exp, newData.Gold, newData.Diamond, newData.LandLevel, newData.LoginAt, newData.Extra, newData.Id)
 	return err
 }
 

@@ -4,7 +4,10 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"gozerodemo.com/apidemo/internal/code"
+	"gozerodemo.com/apidemo/internal/custom"
 	"gozerodemo.com/apidemo/internal/logic/login"
+	"gozerodemo.com/apidemo/internal/response"
 	"gozerodemo.com/apidemo/internal/svc"
 	"gozerodemo.com/apidemo/internal/types"
 )
@@ -19,10 +22,17 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := login.NewLoginLogic(r.Context(), svcCtx)
 		resp, err := l.Login(&req)
+
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			if customErr, ok := err.(custom.CustomError); ok {
+				response.Fail(w, customErr)
+			} else {
+				response.Fail(w, custom.CustomError{
+					Code: code.USER_NOT_EXIST,
+				})
+			}
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			response.Success(w, resp)
 		}
 	}
 }

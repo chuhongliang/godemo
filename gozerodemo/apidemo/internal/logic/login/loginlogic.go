@@ -2,7 +2,10 @@ package login
 
 import (
 	"context"
+	"fmt"
+	"time"
 
+	"gozerodemo.com/apidemo/internal/custom"
 	"gozerodemo.com/apidemo/internal/svc"
 	"gozerodemo.com/apidemo/internal/types"
 
@@ -24,7 +27,20 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
-	// todo: add your logic here and delete this line
+	userInfo, err := l.svcCtx.UserModel.FindOneByUsername(l.ctx, req.Username)
+	fmt.Println("err", err)
+	if err != nil {
+		return nil, &custom.CustomError{
+			Message: "用户名或密码错误",
+			Code:    400,
+		}
+	}
+	fmt.Println("userInfo", userInfo)
 
-	return
+	return &types.LoginResp{
+		Id:       1,
+		Name:     "admin",
+		Token:    "123456",
+		ExpireAt: time.Now().Add(time.Hour * 24).Format("2006-01-02 15:04:05"),
+	}, nil
 }

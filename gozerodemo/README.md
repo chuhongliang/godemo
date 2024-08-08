@@ -40,9 +40,40 @@ $ go run demo.go
 # 生成代码
 ```bash
 // 生成api 代码
-goctl api go --api .\apidemo.api --dir .\
-
+goctl api go --api .\user.api --dir .\
 
 // 生成mysql代码
 goctl model mysql ddl --src user.sql --dir ../user/
+```
+
+# 初始化模版文件
+```bash
+// 初始化.tpl 模版文件
+goctl template init handler.tpl
+goctl template init logic.tpl
+goctl template init svc.tpl​
+
+// 修改模版文件
+vim ~/.goctl/1.7.0/api/handler.tpl
+vim ~/.goctl/1.7.0/api/logic.tpl
+vim ~/.goctl/1.7.0/api/svc.tpl
+```
+
+# swagger 文档
+## 编译安装
+```bash
+GOPROXY=https://goproxy.cn/,direct go install github.com/zeromicro/goctl-swagger@latest
+```
+
+## 配置环境
+将$GOPATH/bin中的goctl-swagger添加到环境变量
+
+## 生成swagger.json 文件
+```bash
+goctl api plugin -plugin goctl-swagger="swagger -filename user.json" -api user.api -dir .
+```
+
+### 指定Host，basePath，schemes api-host-and-base-path
+```bash
+goctl api plugin -plugin goctl-swagger="swagger -filename user.json -host 127.0.0.1 -basepath /api -schemes https,wss" -api user.api -dir .
 ```

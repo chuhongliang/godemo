@@ -1,0 +1,21 @@
+
+
+@baseUrl = http://127.0.0.1:8001
+
+
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTcyMDY3OTU0MywiZXhwIjoxNzIwNzY1OTQzfQ.3GIAPXyizdzJ_RfaRElOl8zGMKqsJjott2FtmLMaHyU
+
+
+### 登录
+POST {{baseUrl}}/v1//user/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin1",
+    "password": "123456"
+}
+
+
+
+
+

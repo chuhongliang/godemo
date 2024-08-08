@@ -1,6 +1,18 @@
 syntax = "v1"
 
 type (
+	SuccessResp {
+		Code    int         `json:"code"`
+		Message string      `json:"message"`
+		Data    interface{} `json:"data"`
+	}
+	ErrorResp {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+)
+
+type (
 	// 定义登录接口的 json 请求体
 	LoginReq {
 		Username string `json:"username"`
@@ -28,6 +40,11 @@ type (
 	}
 	// 定义更新用户信息的 json 请求体
 	UpdateUserInfoReq {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+		Desc string `json:"desc"`
+	}
+	UpdateUserInfoResp {
 		Id   int64  `json:"id"`
 		Name string `json:"name"`
 		Desc string `json:"desc"`
@@ -97,6 +114,6 @@ service user {
 	// 路由为 /user/info/update
 	// 请求体为 UpdateUserInfoReq
 	// 由于不需要响应体，因此可以忽略不写
-	post /user/info/update (UpdateUserInfoReq)
+	post /user/info/update (UpdateUserInfoReq) returns (UpdateUserInfoResp)
 }
 
