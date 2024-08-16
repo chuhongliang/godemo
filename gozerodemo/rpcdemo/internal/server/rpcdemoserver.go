@@ -26,3 +26,8 @@ func (s *RpcdemoServer) Ping(ctx context.Context, in *rpcdemo.Request) (*rpcdemo
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
 }
+
+func (s *RpcdemoServer) SayHello(ctx context.Context, in *rpcdemo.SayHelloReq) (*rpcdemo.SayHelloResp, error) {
+	l := logic.NewSayHelloLogic(ctx, s.svcCtx)
+	return l.SayHello(in)
+}

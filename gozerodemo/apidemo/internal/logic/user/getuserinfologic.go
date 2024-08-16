@@ -3,6 +3,8 @@ package user
 import (
 	"context"
 
+	"gozerodemo.com/apidemo/internal/code"
+	"gozerodemo.com/apidemo/internal/custom"
 	"gozerodemo.com/apidemo/internal/svc"
 	"gozerodemo.com/apidemo/internal/types"
 
@@ -24,7 +26,21 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoReq) (resp *types.GetUserInfoResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, req.Id)
+	if err != nil {
+		return nil, &custom.CustomError{
+			Code: code.USERNAME_OR_PASSWORD_ERROR,
+		}
+	}
+	return &types.GetUserInfoResp{
+		Id:        user.Id,
+		Username:  user.Username,
+		Avatar:    user.Avatar,
+		Level:     user.Level,
+		Exp:       user.Exp,
+		Gold:      user.Gold,
+		Diamond:   user.Diamond,
+		LandLevel: user.LandLevel,
+		Extra:     user.Extra,
+	}, nil
 }

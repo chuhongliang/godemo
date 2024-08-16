@@ -8,3 +8,18 @@ Mysql:
 Auth: 
   AccessSecret: 123758sdfsd5f48dfTOKEN
   AccessExpire: 3600
+
+
+Target: 127.0.0.1:8080
+
+RpcDemoRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: rpcdemo.rpc
+
+GreetRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: greet.rpc

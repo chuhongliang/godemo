@@ -3,19 +3,61 @@
 @baseUrl = http://127.0.0.1:8001
 
 
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTcyMDY3OTU0MywiZXhwIjoxNzIwNzY1OTQzfQ.3GIAPXyizdzJ_RfaRElOl8zGMKqsJjott2FtmLMaHyU
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjMxMTU1MTAsImlhdCI6MTcyMzExMTkxMCwidXNlcklkIjoxfQ.D5K3jvP6gKiFSL5tfV4eefQxdJP2eYVnbUmwdA_0AfI
 
 
-### 登录
-POST {{baseUrl}}/v1//user/login HTTP/1.1
+
+### ping
+POST {{baseUrl}}/v1/user/ping HTTP/1.1
 content-type: application/json
 
 {
-    "username": "admin1",
+    "id": 1
+}
+
+
+
+### 登录
+POST {{baseUrl}}/v1/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
     "password": "123456"
 }
 
 
 
+### 注册
+POST {{baseUrl}}/v1/user/register HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
+    "password": "123456"
+}
+
+
+
+### 获取用户信息
+POST {{baseUrl}}/v1/user/info HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "id": 1
+}
+
+
+
+### 更新用户信息
+POST {{baseUrl}}/v1/user/info/update HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+{
+    "id": 1,
+    "name": "王五"
+}
 
 

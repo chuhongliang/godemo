@@ -37,7 +37,7 @@ type (
 	User struct {
 		Id        int64        `db:"id"`
 		Username  string       `db:"username"`   // 用户名
-		Nickname  string       `db:"nickname"`   // 昵称
+		Password  string       `db:"password"`   // 密码
 		Avatar    string       `db:"avatar"`     // 头像
 		Level     int64        `db:"level"`      // 等级
 		Exp       int64        `db:"exp"`        // 经验值
@@ -92,13 +92,13 @@ func (m *defaultUserModel) FindOneByUsername(ctx context.Context, username strin
 
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Username, data.Nickname, data.Avatar, data.Level, data.Exp, data.Gold, data.Diamond, data.LandLevel, data.LoginAt, data.Extra)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Username, data.Password, data.Avatar, data.Level, data.Exp, data.Gold, data.Diamond, data.LandLevel, data.LoginAt, data.Extra)
 	return ret, err
 }
 
 func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.Username, newData.Nickname, newData.Avatar, newData.Level, newData.Exp, newData.Gold, newData.Diamond, newData.LandLevel, newData.LoginAt, newData.Extra, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.Username, newData.Password, newData.Avatar, newData.Level, newData.Exp, newData.Gold, newData.Diamond, newData.LandLevel, newData.LoginAt, newData.Extra, newData.Id)
 	return err
 }
 

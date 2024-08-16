@@ -13,11 +13,14 @@ import (
 )
 
 type (
-	Request  = rpcdemo.Request
-	Response = rpcdemo.Response
+	Request      = rpcdemo.Request
+	Response     = rpcdemo.Response
+	SayHelloReq  = rpcdemo.SayHelloReq
+	SayHelloResp = rpcdemo.SayHelloResp
 
 	Rpcdemo interface {
 		Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+		SayHello(ctx context.Context, in *SayHelloReq, opts ...grpc.CallOption) (*SayHelloResp, error)
 	}
 
 	defaultRpcdemo struct {
@@ -34,4 +37,9 @@ func NewRpcdemo(cli zrpc.Client) Rpcdemo {
 func (m *defaultRpcdemo) Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	client := rpcdemo.NewRpcdemoClient(m.cli.Conn())
 	return client.Ping(ctx, in, opts...)
+}
+
+func (m *defaultRpcdemo) SayHello(ctx context.Context, in *SayHelloReq, opts ...grpc.CallOption) (*SayHelloResp, error) {
+	client := rpcdemo.NewRpcdemoClient(m.cli.Conn())
+	return client.SayHello(ctx, in, opts...)
 }

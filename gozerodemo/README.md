@@ -20,13 +20,8 @@ go install github.com/tal-tech/go-zero/tools/goctl@latest
 
 // 查看 goctl 版本
 goctl version
-
-// 生成api 项目
-goctl api new apidemo
-
-// 生成rpc 项目
-goctl rpc new rpcdemo
 ```
+
 
 # 启动服务
 ```bash
@@ -37,14 +32,37 @@ go mod tidy
 $ go run demo.go
 ```
 
-# 生成代码
+# 生成api代码
 ```bash
+// 生成api 项目
+goctl api new apidemo
+
 // 生成api 代码
 goctl api go --api .\user.api --dir .\
 
 // 生成mysql代码
 goctl model mysql ddl --src user.sql --dir ../user/
 ```
+
+# 生成rpc代码
+```bash
+// 生成rpc 项目
+goctl rpc new rpcdemo
+
+// 生成 proto 文件
+goctl rpc --o demo.proto
+
+
+// 生成rpc 代码
+goctl rpc proto -o demo.proto --go_out=. --zrpc_out=.
+
+# 单个 rpc 服务生成示例指令
+goctl rpc protoc rpcdemo.proto --go_out=. --go-grpc_out=. --zrpc_out=. --client=true
+
+# 多个 rpc 服务生成示例指令
+goctl rpc protoc greet.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=. --client=true -m
+```
+
 
 # 初始化模版文件
 ```bash

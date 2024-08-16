@@ -2,7 +2,7 @@
 CREATE TABLE `user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(191) DEFAULT '' COMMENT '用户名',
-  `nickname` varchar(191) DEFAULT '' COMMENT '昵称',
+  `password` varchar(191) DEFAULT '' COMMENT '密码',
   `avatar` varchar(191) DEFAULT '' COMMENT '头像',
   `level` bigint DEFAULT '1' COMMENT '等级',
   `exp` bigint DEFAULT '0' COMMENT '经验值',

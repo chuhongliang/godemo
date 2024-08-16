@@ -11,6 +11,16 @@ message Response {
   string pong = 1;
 }
 
+// 定义请求体
+message SayHelloReq {}
+
+// 定义响应体
+message SayHelloResp {}
+
+
+
 service Rpcdemo {
   rpc Ping(Request) returns(Response);
+
+  rpc SayHello(SayHelloReq) returns (SayHelloResp);
 }

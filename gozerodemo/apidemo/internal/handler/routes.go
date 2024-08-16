@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	login "gozerodemo.com/apidemo/internal/handler/login"
+	auth "gozerodemo.com/apidemo/internal/handler/auth"
 	user "gozerodemo.com/apidemo/internal/handler/user"
 	"gozerodemo.com/apidemo/internal/svc"
 
@@ -17,7 +17,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/user/login",
-				Handler: login.LoginHandler(serverCtx),
+				Handler: auth.LoginHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/ping",
+				Handler: auth.PingHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/register",
+				Handler: auth.RegisterHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1"),

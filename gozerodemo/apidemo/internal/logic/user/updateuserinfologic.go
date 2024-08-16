@@ -3,6 +3,8 @@ package user
 import (
 	"context"
 
+	"gozerodemo.com/apidemo/internal/code"
+	"gozerodemo.com/apidemo/internal/custom"
 	"gozerodemo.com/apidemo/internal/svc"
 	"gozerodemo.com/apidemo/internal/types"
 
@@ -24,7 +26,21 @@ func NewUpdateUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 }
 
 func (l *UpdateUserInfoLogic) UpdateUserInfo(req *types.UpdateUserInfoReq) (resp *types.UpdateUserInfoResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	userInfo, err := l.svcCtx.UserModel.FindOne(l.ctx, req.Id)
+	if err != nil {
+		return nil, &custom.CustomError{
+			Code: code.USERNAME_OR_PASSWORD_ERROR,
+		}
+	}
+	userInfo.Username = req.Name
+	err = l.svcCtx.UserModel.Update(l.ctx, userInfo)
+	if err != nil {
+		return nil, &custom.CustomError{
+			Code: code.USERNAME_OR_PASSWORD_ERROR,
+		}
+	}
+	return &types.UpdateUserInfoResp{
+		Id:   req.Id,
+		Name: req.Name,
+	}, nil
 }

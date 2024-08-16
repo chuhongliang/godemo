@@ -1,1 +1,1 @@
-go run user.go
+go run main.go

@@ -37,3 +37,6 @@ func main() {
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }
+
+// grpcurl -plaintext 127.0.0.1:8080 rpcdemo.Rpcdemo/Ping
+// grpcurl -plaintext 127.0.0.1:8080 rpcdemo.Rpcdemo/SayHello
