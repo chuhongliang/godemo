@@ -108,22 +108,26 @@ pm2 start ./build/server.exe -- dev
 ```
 
 
-### Golang 开发笔记
+# Golang 知识合集
+https://segmentfault.com/a/1190000038922260
+
+# Golang 开发笔记
 https://www.bookstack.cn/read/golang_development_notes/zh-preface.md
+
 
 GoAdmin是一个基于 golang 面向生产的数据可视化管理平台搭建框架，可以让你使用简短的代码在极短时间内搭建起一个管理后台
 http://doc.go-admin.cn/zh/install/
 
+
+
+
+# AI 
 H2O-Danube3的推出，不仅丰富了开源小型语言模型的生态系统，也为各种应用场景提供了强大的支持。从聊天机器人到特定任务的微调，再到移动设备上的离线应用，H2O-Danube3都展现出了其广泛的适用性和高效性。
 
-模型下载地址：https://top.aibase.com/tool/h2o-danube3
+- 模型下载地址：https://top.aibase.com/tool/h2o-danube3
 
-论文地址：https://arxiv.org/pdf/2407.09276
-
-
-golang 知识合集
-https://segmentfault.com/a/1190000038922260
+- 论文地址：https://arxiv.org/pdf/2407.09276
 
 
-aider ai自动编程
+## aider ai自动编程
 https://aider.chat/docs/usage/modes.html

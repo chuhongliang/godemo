@@ -35,3 +35,6 @@ https://flix.center/
 
 安装地址：https://www.marticliment.com/unigetui/
 ```
+
+# cursor AI IDE
+https://changelog.cursor.sh/
