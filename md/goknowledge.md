@@ -1,9 +1,10 @@
 
 # Golang [知识合集](https://segmentfault.com/a/1190000038922260)
+- [Go语言必知必会](https://golang.dbwu.tech/)
+- [跟煎鱼学 Go](https://eddycjy.gitbook.io/golang)
 
-## 新手常犯的50个错误
 
-## 数据类型
+# 数据类型
 
 ### nil切片和空切片是否一样
 在 Go 语言中，nil 切片和空切片是不一样的。
@@ -632,7 +633,7 @@ sync.Map 提供了一些方法，如 Store 用于存储、Load 用于读取、De
 
 
 
-## 流程控制
+# 流程控制
 
 ### for循环里append元素会有什么问题
 在 Go 语言中，在 for 循环里使用 append 操作通常不会有直接的问题，但在某些特定情况下可能会遇到一些潜在的情况：
@@ -697,7 +698,7 @@ func main() {
 }
 ```
 
-## 包管理
+# 包管理
 go mod 是 Go 语言 1.11 版本引入的模块管理工具。
 
 它的主要作用包括：
@@ -731,7 +732,7 @@ go mod module [module_path]：打印当前模块的路径。
 在处理依赖冲突时，需要仔细评估每个更改对项目的影响，并进行充分的测试以确保功能的正确性。
 
 
-## 优化
+# 优化
 ### 怎么避免内存逃逸？
 以下是一些在 Go 语言中避免内存逃逸的常见方法：
 - 尽量在函数内部处理数据，避免将函数内的局部变量传递到函数外部。
@@ -908,7 +909,7 @@ func main() {
 
 
 
-## 并发编程
+# 并发编程
 ### 对已经关闭的的chan进行读写，会怎么样？为什么？
 对已经关闭的 chan 进行读操作时，会一直返回已发送的值，直到该 chan 为空，然后返回该 chan 类型的零值。
 
@@ -1010,6 +1011,9 @@ func main() {
 需要注意的是，具体的优化方式需要根据实际的使用情况和性能测试结果来确定。
 
 
+
+# 高级特性
+
 ### 内存管理
 Go 语言的内存管理具有以下特点和机制：
 - 自动内存管理：Go 语言自动处理内存的分配和释放，开发者无需手动管理内存。
@@ -1044,3 +1048,320 @@ GO的GC是并行GC, 也就是GC的大部分处理和普通的go代码是同时�
 - Mark Termination: 完成标记工作, 重新扫描部分根对象(要求STW)
 - Sweep: 按标记结果清扫span
 
+### gc的stw是怎么回事
+- 在垃圾回收（GC）中，STW（Stop-The-World）指的是在垃圾回收的某个阶段，程序的所有执行都会被暂停，以确保垃圾回收的准确性和一致性。
+- 在 STW 期间，应用程序的线程全部停止，以便垃圾回收器能够安全地进行一些关键操作，例如标记根对象、扫描堆内存等。
+- 这是因为如果在垃圾回收过程中，程序还在并发执行并修改对象的引用关系，可能会导致垃圾回收的结果不准确或者出现错误。
+- 然而，过长的 STW 时间会导致程序的响应性下降，影响用户体验。因此，现代的垃圾回收算法通常会努力减少 STW 的时间，采用一些技术，如分代回收、增量回收、并发标记等，来平衡垃圾回收的效率和程序的运行性能。
+
+
+### 什么是写屏障、混合写屏障，如何实现？
+写屏障（Write Barrier）是在垃圾回收过程中，为了保证对象的可达性信息的正确性而采取的一种机制。
+
+写屏障主要用于在对象引用发生变化时，记录相关信息，以便垃圾回收器能够正确地跟踪对象的可达性。
+
+混合写屏障（Mixed Write Barrier）是一种结合了之前的写屏障策略的改进方式。
+
+实现写屏障和混合写屏障通常需要在语言的运行时层面进行修改。以下是一个简单的示例概念，并非完整的可运行代码：
+
+```go
+func writeBarrier(obj, ref interface{}) {
+    // 在这里记录对象引用的变化
+    // 可能涉及将相关信息存储到特定的数据结构中，以供垃圾回收器使用
+}
+
+func mixedWriteBarrier(obj, ref interface{}) {
+    // 实现混合写屏障的逻辑
+    // 结合了不同的策略来处理对象引用的变化
+}
+```
+实际的实现会非常复杂，涉及到对语言运行时的深入理解和优化。不同的编程语言实现方式也会有所不同。
+
+
+
+### 能说说uintptr和unsafe.Pointer的区别
+uintptr 和 unsafe.Pointer 在 Go 语言中有以下区别：
+
+unsafe.Pointer 是一种可以指向任意类型的指针，可以在不同类型的指针之间进行转换，但是这种转换是不安全的，需要谨慎使用。
+
+uintptr 是一个整数类型，用于存储指针的地址值。它没有指针的语义，不能直接指向一个变量，也不能进行指针运算。
+
+主要的区别在于：
+- unsafe.Pointer 具有指针的特性，可以和普通指针进行相互转换。
+- uintptr 只是一个整数，用于存储地址值，通常用于与指针的算术运算来操作内存地址。
+使用这两个类型时要特别小心，因为不正确的使用可能导致程序出现未定义的行为和错误。
+
+
+### reflect（反射包）如何获取字段 tag？为什么 json 包不能导出私有变量的 tag？
+在 Go 语言的 reflect 包中，可以通过以下方式获取字段的 tag ：
+```go
+package main
+
+import (
+    "fmt"
+    "reflect"
+)
+
+type Person struct {
+    Name string `json:"name"`
+}
+
+func getTags(s interface{}) {
+    t := reflect.TypeOf(s)
+    if t.Kind()!= reflect.Struct {
+        fmt.Println("Not a struct")
+        return
+    }
+    for i := 0; i < t.NumField(); i++ {
+        field := t.Field(i)
+        tag := field.Tag.Get("json")
+        fmt.Printf("Field: %s, Tag: %s\n", field.Name, tag)
+    }
+}
+
+func main() {
+    p := Person{}
+    getTags(p)
+}
+```
+json 包不能导出私有变量的 tag 是因为 json 包在序列化和反序列化数据时遵循了 Go 语言的访问控制原则。私有变量在包外不可访问，json 包作为一个独立的包，无法访问其他包中的私有变量及其相关的 tag 信息。这是为了保证代码的封装性和安全性。
+
+### 开多个线程和开多个协程会有什么区别
+在 Go 语言中，线程和协程有以下一些主要区别：
+
+- 资源消耗：线程由操作系统管理，创建和切换线程的开销较大，因为涉及到操作系统内核态的切换和系统资源的分配。而协程由 Go 运行时管理，创建和切换协程的开销非常小，主要是在用户态完成。
+
+- 并发性：线程是真正的并行执行单元，多个线程可以在多核 CPU 上同时执行。而协程本质上是协作式的并发，在单个线程内通过调度来切换执行。
+
+- 调度：线程的调度由操作系统控制，不可控性较大。协程的调度由 Go 运行时进行，更加灵活高效。
+
+- 通信方式：线程之间通信通常需要使用同步原语，如锁、条件变量等，容易导致死锁和竞态条件等问题。协程之间可以通过通道（channel）进行通信，更加简洁和安全。
+
+- 内存占用：线程需要较大的内存来保存线程的上下文信息。协程占用的内存相对较小。
+
+以下是一个简单的示例代码，展示了线程和协程在并发执行上的一些区别：
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+// 模拟线程执行的函数
+func threadFunction(name string, wg *sync.WaitGroup) {
+    defer wg.Done()
+    fmt.Printf("Thread %s started\n", name)
+    time.Sleep(2 * time.Second)
+    fmt.Printf("Thread %s finished\n", name)
+}
+
+// 模拟协程执行的函数
+func goroutineFunction(name string) {
+    fmt.Printf("Goroutine %s started\n", name)
+    time.Sleep(2 * time.Second)
+    fmt.Printf("Goroutine %s finished\n", name)
+}
+
+func main() {
+    // 线程示例
+    var wg sync.WaitGroup
+    wg.Add(2)
+    go threadFunction("Thread 1", &wg)
+    go threadFunction("Thread 2", &wg)
+    wg.Wait()
+
+    // 协程示例
+    go goroutineFunction("Goroutine 1")
+    go goroutineFunction("Goroutine 2")
+    time.Sleep(5 * time.Second)
+}
+```
+
+### 协程和线程的差别
+协程和线程主要有以下几个方面的差别：
+
+内存消耗：
+- 线程由于需要内核的支持，通常会有较大的内存开销。
+- 协程的内存消耗相对较小，因为其切换主要在用户态进行，不需要太多的系统资源。
+
+切换开销：
+- 线程的切换涉及到内核态和用户态的切换，开销较大。
+- 协程的切换在用户态完成，切换速度快，开销小。
+
+并发性：
+- 线程是操作系统层面的并发机制，数量相对有限。
+- 协程可以创建数量众多，在高并发场景下更具优势。
+
+调度：
+- 线程的调度由操作系统内核完成。
+- 协程的调度通常由开发者在代码中控制。
+
+异常处理：
+- 线程中的一个异常可能会影响整个进程。
+- 协程中的异常通常可以在协程内部进行处理，不会轻易影响到其他协程。
+
+总之，在很多场景中，协程由于其轻量、高效的特点，被广泛应用于提高程序的并发性能和响应性。
+
+
+### 协程之间是怎么调度的
+在 Go 语言中，协程的调度是由 Go 运行时系统自动完成的。
+
+Go 语言的协程调度器主要基于以下几个原则和机制：
+- 工作窃取（Work Stealing）：当一个线程的本地任务队列没有任务可执行时，它会尝试从其他线程的任务队列中窃取任务来执行。
+- 协作式出让（Cooperative Yielding）：协程会在适当的时候主动出让 CPU 时间，例如在等待 I/O 操作完成或者进行一些长时间的计算时。
+- 全局队列和本地队列：协程任务被分配到线程的本地队列和全局队列中。当本地队列没有任务时，会从全局队列获取任务。
+- 抢占式调度：在某些情况下，例如长时间运行的协程，运行时系统会强制抢占当前协程，将 CPU 资源分配给其他协程。
+以下是一个简单的示例代码，展示了协程的使用，但并未直接涉及调度的实现细节：
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func task(name string) {
+    for i := 0; i < 5; i++ {
+        fmt.Printf("%s is running\n", name)
+        time.Sleep(time.Millisecond * 100)
+    }
+}
+
+func main() {
+    go task("coroutine 1")
+    go task("coroutine 2")
+
+    time.Sleep(time.Second * 2)
+}
+```
+
+
+### 开源库里会有一些类似下面这种奇怪的用法：var _ io.Writer = (*myWriter)(nil)，是为什么？
+这种用法通常是为了确保某个类型实现了特定的接口。
+
+在 var _ io.Writer = (*myWriter)(nil) 中，通过将 (*myWriter)(nil) 赋值给 io.Writer 类型的变量，编译器会检查 *myWriter 类型是否满足 io.Writer 接口的所有方法。如果不满足，编译器会报错。
+
+这种方式可以在代码中进行静态类型检查，确保自定义的类型实现了所需的接口，有助于在开发过程中尽早发现类型实现接口不完整的问题。
+
+
+### 两个interface{} 能不能比较
+在 Go 语言中，两个 interface{} 类型的值不能直接比较。因为 interface{} 可以存储任意类型的值，而不同类型的值之间的比较是不被允许的。
+
+但是，如果 interface{} 实际存储的值是可比较的类型（如基本数据类型、数组等），并且实际存储的类型相同，那么可以先通过类型断言将其转换为具体的类型，然后再进行比较。
+
+以下是一个示例代码来说明：
+```go
+package main
+
+import "fmt"
+
+func compareInterfaces(a, b interface{}) {
+    // 类型断言
+    if av, ok := a.(int); ok {
+        if bv, ok := b.(int); ok {
+            if av == bv {
+                fmt.Println("相等")
+            } else {
+                fmt.Println("不相等")
+            }
+        } else {
+            fmt.Println("类型不一致，无法比较")
+        }
+    } else {
+        fmt.Println("无法进行比较")
+    }
+}
+
+func main() {
+    var a interface{} = 5
+    var b interface{} = 5
+    compareInterfaces(a, b)
+}
+
+
+```
+
+### go栈扩容和栈缩容，连续栈的缺点
+在 Go 语言中：
+栈扩容：当函数调用层级增加或局部变量使用较多导致当前栈空间不足时，Go 会自动进行栈扩容。栈扩容是一个相对开销较大的操作，但这种自动扩容机制使得开发者无需过多关注栈空间的管理。
+
+栈缩容：在函数返回后，如果栈空间有大量剩余，Go 会自动进行栈缩容，以释放不再使用的栈内存。
+
+连续栈的缺点主要包括：
+- 内存碎片：连续栈的分配和释放可能导致内存碎片的产生，尤其是在频繁进行栈扩容和缩容的情况下。
+- 分配开销：在进行栈扩容时，需要重新分配一块更大的连续内存空间，并将原有的数据复制过去，这会带来一定的性能开销。
+- 预分配浪费：如果为了避免频繁扩容而预分配较大的栈空间，可能会导致在实际使用中大量内存被浪费。
+
+
+
+
+
+### golang怎么做代码优化
+以下是一些在 Go 语言中进行代码优化的常见方法：
+
+- 合理使用数据结构：根据具体的需求选择合适的数据结构，例如，如果需要快速查找和插入操作，可以使用 map ；如果需要保持元素的顺序，可以使用 slice 或 array 。
+- 避免不必要的内存分配：尽量复用内存，例如使用 sync.Pool 来缓存和复用临时对象。
+- 减少字符串操作：字符串的拼接操作可能会导致内存分配，尽量使用 strings.Builder 来构建字符串。
+- 并发优化：使用合适数量的 goroutine ，避免过多的 goroutine 导致系统资源消耗过大。
+- 优化循环：避免在循环内部进行不必要的计算或函数调用。
+- 函数设计：保持函数简短和专注，提高函数的复用性。
+- 缓存常用结果：对于重复计算且结果不变的操作，可以进行缓存。
+- 数据类型选择：根据实际数据范围选择合适的数据类型，以节省内存。
+- 减少 I/O 操作：尽量批量进行 I/O 操作，减少频繁的读写。
+- 性能测试和分析：使用工具如 pprof 来分析代码的性能瓶颈，有针对性地进行优化。
+
+以下是一个简单的示例，展示了如何优化字符串拼接：
+```go
+package main
+
+import (
+    "strings"
+    "testing"
+)
+
+// 未优化的字符串拼接
+func concatStringsUnoptimized(strs []string) string {
+    result := ""
+    for _, str := range strs {
+        result += str
+    }
+    return result
+}
+
+// 优化后的字符串拼接
+func concatStringsOptimized(strs []string) string {
+    var builder strings.Builder
+    for _, str := range strs {
+        builder.WriteString(str)
+    }
+    return builder.String()
+}
+
+func BenchmarkConcatStringsUnoptimized(b *testing.B) {
+    strs := []string{"hello", "world", "golang"}
+    for i := 0; i < b.N; i++ {
+        concatStringsUnoptimized(strs)
+    }
+}
+
+func BenchmarkConcatStringsOptimized(b *testing.B) {
+    strs := []string{"hello", "world", "golang"}
+    for i := 0; i < b.N; i++ {
+        concatStringsOptimized(strs)
+    }
+}
+```
+
+### golang隐藏技能:怎么访问私有成员
+用unsafe包中的unsafe.Pointer获取到结构体对象的首地址，然后加上想访问的私有变量的偏移地址就是私有变量的地址。
+
+
+### 必须要手动对齐内存的情况
+- [内存对齐](https://golang.dbwu.tech/performance/memory_alignment/)
+在 空结构体 小节中，我们谈到过 空结构体 struct{} 大小为 0。当结构体中字段的类型为 struct{} 时， 一般情况下不需要内存对齐。但是有一种情况例外：当最后一个字段类型为 struct{} 时，需要内存对齐。
+
+如果内存没有对齐，同时有指针指向结构体最后一个字段, 那么指针对应的的地址将到达结构体之外，虽然 Go 保证了无法对该指针进行任何操作 (避免安全问题)，但是如果该指针一直存活不释放对应的内存， 就会产生内存泄露问题（指针指向的内存不会因为结构体释放而释放）。
+
+一个良好实践是: 不要将 struct{} 类型的字段放在结构体的最后，这样可以避免 内存对齐 带来的占用损耗。
