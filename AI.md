@@ -38,3 +38,7 @@ https://flix.center/
 
 # cursor AI IDE
 https://changelog.cursor.sh/
+
+
+## 软著申请 
+https://www.ccopyright.com.cn/index.php?optionid=1033
