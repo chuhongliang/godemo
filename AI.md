@@ -42,3 +42,11 @@ https://changelog.cursor.sh/
 
 ## 软著申请 
 https://www.ccopyright.com.cn/index.php?optionid=1033
+
+
+## Chrome 浏览器插件开发
+- [Chrome 浏览器插件开发实践指南](https://18055975947.github.io/extension/)
+- [Chrome 扩展(插件) 开发官方文档中文版帮助手册教程](https://geekdaxue.co/read/chrome-extension-guide/README.md)
+
+## 小飞机网盘
+https://www.feijipan.com/
