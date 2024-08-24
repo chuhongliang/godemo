@@ -131,3 +131,9 @@ H2O-Danube3的推出，不仅丰富了开源小型语言模型的生态系统，
 
 ## aider ai自动编程
 https://aider.chat/docs/usage/modes.html
+
+## 以太坊
+https://ethereum.org/zh/developers/docs/networks/
+
+## Web3全栈开发指南
+https://liaoxuefeng.com/blogs/all/2023-02-13-web3-full-stack/
